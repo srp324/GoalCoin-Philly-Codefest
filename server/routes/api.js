@@ -55,9 +55,10 @@ let response = {
 };
 
 // Get Contract
-router.get('/createContract', (req, res) => { 
+router.get('/getContract/:address', (req, res) => { 
+    
     res.setHeader('Content-Type', 'application/json');
-    res.send(contractInstance.address);
+    res.send(JSON.stringify(contract.at(req.params['caddress'])));
 });
 
 // Get ABI
@@ -99,6 +100,13 @@ router.get('/getWinner/:caddress-:address', (req, res) => {
     res.send(token.getWinner.call(0, function(err, res){ console.log(res) }));
 });
 
+//Send ether from one address to another
+router.get('/send/:fromaddress-:toaddress-:value', (req, res) => {
+
+    res.setHeader('Content-Type', 'application/json');
+    res.send(web3.eth.sendTransaction({from: req.params['fromaddress'], to: req.params['toaddress'], value: web3.toWei(req.params['value'], "ether")}));
+});
+
 // Test if the contract's goal is closed before and after the goal is closed
 // and that a winner is successfully added
 function testContract(address) {
@@ -111,6 +119,8 @@ function testContract(address) {
     token.getWinner.call(0, function(err, res){ console.log(res) });
     token.addWinner('0x922225717aedc151ca59b8f68e0309be29b79109', {from: '0x922225717aedc151ca59b8f68e0309be29b79109', gas:3000000}, function(err, res){ console.log("Added 0x922225717aedc151ca59b8f68e0309be29b79109") });
     token.getWinner.call(0, function(err, res){ console.log(res) });
+
+    console.log("Test finished!");
 }
 
 module.exports = router;
