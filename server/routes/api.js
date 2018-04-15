@@ -14,6 +14,7 @@ let bytecode = compiledContract.contracts[':GoalContract'].bytecode;
 let contract = web3.eth.contract(JSON.parse(abi));
 var accounts = contract.eth.accounts;
 var address;
+var owner;
 
 router.get('/deployContract/:owner-:addresses-:reward', (req, res) => { 
     
@@ -42,12 +43,14 @@ router.get('/deployContract/:owner-:addresses-:reward', (req, res) => {
 
                 //Send reward budgets to storage account
                 var addresses = req.params['addresses'].split(",");
-                var owner = req.params['owner'];
+                if (address == null) {
+                    address = res.address;
+                }
 
                 for (var i = 0; i < addresses.length; ++i) {
-                    console.log(i + ": " + addresses[i] + " - " + web3.eth.getBalance(addresses[i]) + " -- " + req.params['reward'] / addresses.length + " TO 0xc91cbdbbb3e99d1a578fc07ddd985faf2e573155");
-                    res.addUser(addresses[i], {from: owner, gas:3000000});
-                    web3.eth.sendTransaction({from: addresses[i], to: '0xc91cbdbbb3e99d1a578fc07ddd985faf2e573155', value: web3.toWei(req.params['reward'] / addresses.length, "ether")});
+                    console.log(i + ": " + addresses[i] + " - " + web3.eth.getBalance(addresses[i]) + " -- " + req.params['reward'] / addresses.length + " TO 0xcd0e3666190cfead0e31785864827d029c0d03a6");
+                    res.addUser(addresses[i], {from: '0xcd0e3666190cfead0e31785864827d029c0d03a6', gas:3000000});
+                    web3.eth.sendTransaction({from: addresses[i], to: '0xcd0e3666190cfead0e31785864827d029c0d03a6', value: web3.toWei(req.params['reward'] / addresses.length, "ether")});
                     
                 }
 
@@ -76,8 +79,17 @@ let response = {
 // Get Contract
 router.get('/getContract/:address', (req, res) => { 
     
+    response.data = JSON.parse(contract.at(req.params['address']));
     res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify(contract.at(req.params['caddress'])));
+    res.json(response);
+});
+
+// Get Contract Address
+router.get('/getContract', (req, res) => { 
+    console.log(address);
+    response.data = [address];
+    res.setHeader('Content-Type', 'application/json');
+    res.json(response);
 });
 
 // Get ABI
@@ -117,6 +129,21 @@ router.get('/addWinner/:caddress-:uaddress', (req, res) => {
     res.send(token.addWinner(req.params['uaddress'], {from: req.params['uaddress'], gas:3000000}, function(err, res){ console.log("Added " + req.params['uaddress']) }));
 });
 
+// Add winners based on contract address and user addresses
+router.get('/addWinners/:caddress-:addresses', (req, res) => { 
+    const token = contract.at(req.params['caddress']);
+
+    var addresses = req.params['addresses'].split(",");
+
+    for (var i = 0; i < addresses.length; ++i) {
+        console.log("Added winner " + addresses[i]);
+        token.addWinner(addresses[i], {from: '0xcd0e3666190cfead0e31785864827d029c0d03a6', gas:3000000});  
+    }
+
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify(response));
+});
+
 // Get Winner
 router.get('/getWinner/:caddress-:index', (req, res) => { 
     const token = contract.at(req.params['caddress']);
@@ -137,7 +164,7 @@ router.get('/addUser/:caddress-:uaddress', (req, res) => {
 router.get('/getUsers/:caddress', (req, res) => { 
     const token = contract.at(req.params['caddress']);
 
-    response.data = token.getUsers.call();
+    response.data = JSON.stringify({'users': token.getUsers.call(), 'caddress': req.params['caddress'] });
     res.setHeader('Content-Type', 'application/json');
     res.json(response);
 });
@@ -167,7 +194,7 @@ router.get('/completeGoal/:caddress', (req, res) => {
     for (var i = 0; i < winnersSize; ++i) {
         var winnerAddress = token.getWinner.call(i);
         console.log("WinnerAddress: " + i + " - " + winnerAddress);
-        web3.eth.sendTransaction({from: '0xc91cbdbbb3e99d1a578fc07ddd985faf2e573155', to: winnerAddress, value: web3.toWei(reward / winnersSize, "ether")})
+        web3.eth.sendTransaction({from: '0xcd0e3666190cfead0e31785864827d029c0d03a6', to: winnerAddress, value: web3.toWei(reward / winnersSize, "ether")})
     }
 
     console.log("Goal complete!");
@@ -196,11 +223,11 @@ function testContract(address) {
     const token = contract.at(address);
 
     var result = token.isGoalClosed.call(function(err, res){ console.log(res) });
-    token.closeGoal({from: '0xd96b94aa51c36155dbf92477653f2d9fd82dcc5a', gas:3000000}, function(err, res){ console.log("Goal closed!") });
+    token.closeGoal({from: '0x18d273f75fcb9aed60b2c226914079b26f6a4f5a', gas:3000000}, function(err, res){ console.log("Goal closed!") });
     result = token.isGoalClosed.call(function(err, res){ console.log(res) });
 
     token.getWinner.call(0, function(err, res){ console.log(res) });
-    token.addWinner('0xd96b94aa51c36155dbf92477653f2d9fd82dcc5a', {from: '0xd96b94aa51c36155dbf92477653f2d9fd82dcc5a', gas:3000000}, function(err, res){ console.log("Added 0xd96b94aa51c36155dbf92477653f2d9fd82dcc5a") });
+    token.addWinner('0x18d273f75fcb9aed60b2c226914079b26f6a4f5a', {from: '0x18d273f75fcb9aed60b2c226914079b26f6a4f5a', gas:3000000}, function(err, res){ console.log("Added 0x18d273f75fcb9aed60b2c226914079b26f6a4f5a") });
     token.getWinner.call(0, function(err, res){ console.log(res) });
 
     console.log("Test finished on " + address);

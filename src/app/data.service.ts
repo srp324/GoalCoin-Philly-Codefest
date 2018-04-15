@@ -18,4 +18,16 @@ export class DataService {
     return this._http.get("/api/deployContract/" + owner + "-" + addresses + "-" + reward).map(result => this.result = result.json().data);
   }
 
+  getUsers(caddress) {
+    return this._http.get("/api/getUsers/" + caddress).map(result => this.result = result.json().data);
+  }
+
+  getCAddress() {
+    return this._http.get("/api/getContract").map(result => this.result = result.json().data);
+  }
+
+  addWinners(caddress, winners) {
+    return this._http.get("/api/addWinners/" + caddress + "-" + winners).map(result => this.result = result.json().data);
+  }
+
 }

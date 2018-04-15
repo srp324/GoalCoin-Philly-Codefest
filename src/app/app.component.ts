@@ -17,6 +17,8 @@ export class AppComponent {
   addresses = "";
   goal = "";
   reward = "";
+  winners = "";
+  caddress = "";
 
   // Create an instance of the DataService through dependency injection
   constructor(private _dataService: DataService) 
@@ -34,6 +36,18 @@ export class AppComponent {
   deployContract() {
     this._dataService.deployContract(this.owner, this.addresses, this.goal, this.reward).subscribe(res => this.result = res);
     console.log("Created contract with owner: " + this.owner);
+    console.log(this.result);
+  }
+
+  getCAddress() {
+    this._dataService.getCAddress().subscribe(res => this.result = res);
+    console.log("Got CAddress!");
+    console.log(this.result);
+  }
+
+  addWinners() {
+    this._dataService.addWinners(this.caddress, this.winners).subscribe(res => this.result = res);
+    console.log("Added winners!");
     console.log(this.result);
   }
 }

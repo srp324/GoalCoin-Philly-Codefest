@@ -11,16 +11,16 @@
 
         <h1>GoalCoin</h1>
 		
-		    <label for="owner" class="col-lg-4 control-label">Your Address</label>
-        <input id="owner" type="text" placeholder="Ex: 0xdbaa1dcc665a165e3bf046220767dd220ae0a270"
+		    <label for="owner" class="col-lg-4 control-label">Your Wallet Key</label>
+        <input id="owner" type="text" placeholder="ex: 0xdbaa1dcc665a165e3bf046220767dd220ae0a270"
         [(ngModel)]="owner">
 
-        <label for="addresses" class="col-lg-4 control-label">User Addresses</label>
-        <input id="addresses" type="text" placeholder="Ex: 0x9c569cdfec5ea144558d7d452fb60fcc16cb4902,0x530408d022015e6ac11483ada6ea8ee92c4fa06d,0x65e685befa9ffd287c3e3d8199e1e01d65a3c925"
+        <label for="addresses" class="col-lg-4 control-label">Friend's Wallet Keys</label>
+        <input id="addresses" type="text" placeholder="ex: 0x9c569cdfec5ea144558d7d452fb60fcc16cb4902,0x530408d022015e6ac11483ada6ea8ee92c4fa06d,0x65e685befa9ffd287c3e3d8199e1e01d65a3c925"
         [(ngModel)]="addresses">
 		
         <label for="goal" class="col-lg-4 control-label">Goal</label>
-        <input id="goal" type="text" placeholder="Ex: Do 50 pushups a day for a month"
+        <input id="goal" type="text" placeholder="ex: Do 50 pushups a day for a month"
         [(ngModel)]="goal">
 		
 		    <label for="reward" class="col-lg-4 control-label">Reward</label>
@@ -28,7 +28,18 @@
         [(ngModel)]="reward">
 
         <button id="creategoal" type="button" class="btn btn-primary btn-lg" (click)="deployContract();">Create goal!</button>
-    </div>
+    
+        <label for="caddress" class="col-lg-4 control-label">Goal (Contract) Address</label>
+        <input id="caddress" type="text" placeholder="ex: 0x18d273f75fcb9aed60b2c226914079b26f6a4f5a"
+        [(ngModel)]="caddress">
+
+        <label for="winners" class="col-lg-4 control-label">Add Winners</label>
+        <input id="winners" type="text" placeholder="ex: 0x9c569cdfec5ea144558d7d452fb60fcc16cb4902,0x530408d022015e6ac11483ada6ea8ee92c4fa06d"
+        [(ngModel)]="winners">
+        <button id="addWinnersButton" type="button" class="btn btn-primary btn-lg" (click)="addWinners();">Add Winners</button>
+      </div>
+
+
 
 </body>
 </html>
