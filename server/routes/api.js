@@ -213,7 +213,7 @@ router.get('/getBalances/:addresses', (req, res) => {
     for (var i = 0; i < addresses.length; ++i) {
         //console.log(addresses[i] + "'s balance: " + web3.eth.getBalance(address[i]));
         var address = addresses[i];
-        response.data.push(JSON.parse({ address : web3.eth.getBalance(address) }));
+        response.data.push(JSON.parse("{ \"" + address + "\":\"" + web3.eth.getBalance(address).toString() + "\"}"));
     }
 
     res.setHeader('Content-Type', 'application/json');
