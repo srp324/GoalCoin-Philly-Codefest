@@ -12,7 +12,6 @@ let abi = compiledContract.contracts[':GoalContract'].interface;
 let bytecode = compiledContract.contracts[':GoalContract'].bytecode;
 
 let contract = web3.eth.contract(JSON.parse(abi));
-var accounts = contract.eth.accounts;
 var address;
 
 router.get('/deployContract/:owner-:addresses-:reward', (req, res) => { 
