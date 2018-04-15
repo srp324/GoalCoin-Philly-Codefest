@@ -30,4 +30,8 @@ export class DataService {
     return this._http.get("/api/addWinners/" + caddress + "-" + winners).map(result => this.result = result.json().data);
   }
 
+  completeGoal(caddress) {
+    return this._http.get("/api/completeGoal/" + caddress).map(result => this.result = result.json().data);
+  }
+
 }

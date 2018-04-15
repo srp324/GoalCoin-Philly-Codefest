@@ -188,11 +188,10 @@ router.get('/completeGoal/:caddress', (req, res) => {
     const token = contract.at(req.params['caddress']);
     var reward = token.getReward.call();
     var winnersSize = token.getWinnersSize.call();
-    console.log(reward + " / " + winnersSize);
 
     for (var i = 0; i < winnersSize; ++i) {
         var winnerAddress = token.getWinner.call(i);
-        console.log("WinnerAddress: " + i + " - " + winnerAddress);
+        console.log("Winner " +(i+1) + "(" + winnerAddress + ") has been awarded " + reward / winnersSize + " ether! Good job!");
         web3.eth.sendTransaction({from: '0xcd0e3666190cfead0e31785864827d029c0d03a6', to: winnerAddress, value: web3.toWei(reward / winnersSize, "ether")})
     }
 
@@ -204,6 +203,19 @@ router.get('/getBalance/:address', (req, res) => {
     console.log(balance);
 
     response.data = JSON.parse(balance);
+    res.setHeader('Content-Type', 'application/json');
+    res.json(response);
+});
+
+router.get('/getBalances/:addresses', (req, res) => {
+    var addresses = req.params['addresses'].split(",");
+
+    for (var i = 0; i < addresses.length; ++i) {
+        //console.log(addresses[i] + "'s balance: " + web3.eth.getBalance(address[i]));
+        var address = addresses[i];
+        response.data.push(JSON.parse({ address : web3.eth.getBalance(address) }));
+    }
+
     res.setHeader('Content-Type', 'application/json');
     res.json(response);
 });

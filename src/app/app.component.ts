@@ -50,4 +50,10 @@ export class AppComponent {
     console.log("Added winners!");
     console.log(this.result);
   }
+
+  completeGoal() {
+    this._dataService.completeGoal(this.caddress).subscribe(res => this.result = res);
+    console.log("Goal Complete! Awarded the winners!");
+    console.log(this.result);
+  }
 }
