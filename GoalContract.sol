@@ -47,4 +47,8 @@ contract GoalContract {
     function getReward() public returns (uint) {
         return reward;
     }
+    
+    function getWinner(uint index) public returns (address) {
+        return winners[index];
+    }
 }

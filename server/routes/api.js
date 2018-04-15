@@ -34,8 +34,9 @@ const contractInstance = contract.new(1500, {
     // If we have an address property, the contract was deployed
     if (res.address) {
         console.log('Contract address: ' + res.address);
+
         // Let's test the deployed contract
-        testContract(res.address);
+        //testContract(res.address);
     }
 });
 
@@ -73,7 +74,7 @@ router.get('/getReward/:address', (req, res) => {
     res.send(token.getReward.call(function(err, res){ console.log(res.toString()) }));
 });
 
-//Get goalClosed based on contract address
+// Get goalClosed based on contract address
 router.get('/isGoalClosed/:address', (req, res) => { 
     const token = contract.at(req.params['address']);
 
@@ -81,14 +82,35 @@ router.get('/isGoalClosed/:address', (req, res) => {
     res.send(token.isGoalClosed.call(function(err, res){ console.log(res) }));
 });
 
+// Add winner based on contract address and user address
+// TODO: Switch from to contract owner
+router.get('/addWinner/:caddress-:uaddress', (req, res) => { 
+    const token = contract.at(req.params['caddress']);
+
+    res.setHeader('Content-Type', 'application/json');
+    res.send(token.addWinner(req.params['uaddress'], {from: req.params['uaddress'], gas:3000000}, function(err, res){ console.log("Added " + req.params['uaddress']) }));
+});
+
+// Get Winner (hardcoded to 0)
+router.get('/getWinner/:caddress-:address', (req, res) => { 
+    const token = contract.at(req.params['caddress']);
+
+    res.setHeader('Content-Type', 'application/json');
+    res.send(token.getWinner.call(0, function(err, res){ console.log(res) }));
+});
+
+// Test if the contract's goal is closed before and after the goal is closed
+// and that a winner is successfully added
 function testContract(address) {
-    // Reference to the deployed contract
     const token = contract.at(address);
 
     var result = token.isGoalClosed.call(function(err, res){ console.log(res) });
-    token.closeGoal({from: '0x922225717aedc151ca59b8f68e0309be29b79109', gas:3000000}, function(err, res){ console.log("Goal closed!"); });
+    token.closeGoal({from: '0x922225717aedc151ca59b8f68e0309be29b79109', gas:3000000}, function(err, res){ console.log("Goal closed!") });
     result = token.isGoalClosed.call(function(err, res){ console.log(res) });
 
+    token.getWinner.call(0, function(err, res){ console.log(res) });
+    token.addWinner('0x922225717aedc151ca59b8f68e0309be29b79109', {from: '0x922225717aedc151ca59b8f68e0309be29b79109', gas:3000000}, function(err, res){ console.log("Added 0x922225717aedc151ca59b8f68e0309be29b79109") });
+    token.getWinner.call(0, function(err, res){ console.log(res) });
 }
 
 module.exports = router;
