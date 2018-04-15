@@ -13,6 +13,7 @@ let bytecode = compiledContract.contracts[':GoalContract'].bytecode;
 let gasEstimate = web3.eth.estimateGas({data: bytecode}); //Not used
 
 let contract = web3.eth.contract(JSON.parse(abi));
+var address;
 
 const contractInstance = contract.new(1500, {
     data: '0x' + bytecode,
@@ -34,7 +35,8 @@ const contractInstance = contract.new(1500, {
     // If we have an address property, the contract was deployed
     if (res.address) {
         console.log('Contract address: ' + res.address);
-
+        address = res.address;
+        
         // Let's test the deployed contract
         //testContract(res.address);
     }
@@ -51,7 +53,7 @@ const sendError = (err, res) => {
 let response = {
     status: 200,
     data: [],
-    message: null
+    message: "Retrieved ABI"
 };
 
 // Get Contract
@@ -65,6 +67,13 @@ router.get('/getContract/:address', (req, res) => {
 router.get('/getABI', (req, res) => { 
     res.setHeader('Content-Type', 'application/json');
     res.send(JSON.parse(abi));
+});
+
+// Get ABI
+router.get('/getABI2', (req, res) => { 
+    response.data = JSON.parse(abi);
+    res.setHeader('Content-Type', 'application/json');
+    res.json(response);
 });
 
 // Get Reward based on contract address
@@ -104,7 +113,7 @@ router.get('/getWinner/:caddress-:address', (req, res) => {
 router.get('/send/:fromaddress-:toaddress-:value', (req, res) => {
 
     res.setHeader('Content-Type', 'application/json');
-    res.send(web3.eth.sendTransaction({from: req.params['fromaddress'], to: req.params['toaddress'], value: web3.toWei(req.params['value'], "ether")}));
+    res.send(web3.eth.sendTransaction({from: req.params['fromaddress'], to: req.params['toaddress'], value: web3.toWei(req.params['value'], "ether")}, function(err, res) {console.log("Sent " + req.params['value'] + " ether from " + req.params['fromaddress'] + " to " + req.params['toaddress']);}));
 });
 
 // Test if the contract's goal is closed before and after the goal is closed
@@ -120,7 +129,7 @@ function testContract(address) {
     token.addWinner('0x922225717aedc151ca59b8f68e0309be29b79109', {from: '0x922225717aedc151ca59b8f68e0309be29b79109', gas:3000000}, function(err, res){ console.log("Added 0x922225717aedc151ca59b8f68e0309be29b79109") });
     token.getWinner.call(0, function(err, res){ console.log(res) });
 
-    console.log("Test finished!");
+    console.log("Test finished on " + address);
 }
 
 module.exports = router;
