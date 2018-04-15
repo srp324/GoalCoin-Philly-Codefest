@@ -13,6 +13,10 @@ export class AppComponent {
   //users: Array<any>;
   users: any;
   dataService: DataService;
+  owner = "";
+  addresses = "";
+  goal = "";
+  reward = "";
 
   // Create an instance of the DataService through dependency injection
   constructor(private _dataService: DataService) 
