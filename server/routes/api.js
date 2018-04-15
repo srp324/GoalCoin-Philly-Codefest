@@ -10,13 +10,14 @@ let source = fs.readFileSync('GoalContract.sol', 'utf8');
 let compiledContract = solc.compile(source, 1);
 let abi = compiledContract.contracts[':GoalContract'].interface;
 let bytecode = compiledContract.contracts[':GoalContract'].bytecode;
-let gasEstimate = web3.eth.estimateGas({data: bytecode});
+let gasEstimate = web3.eth.estimateGas({data: bytecode}); //Not used
+
 let contract = web3.eth.contract(JSON.parse(abi));
 
-const contractInstance = contract.new({
+const contractInstance = contract.new(1500, {
     data: '0x' + bytecode,
     from: '0x922225717aedc151ca59b8f68e0309be29b79109',
-    gas: gasEstimate 
+    gas: 3000000
     }, 
 
     // NOTE: The callback will fire twice!
@@ -33,7 +34,6 @@ const contractInstance = contract.new({
     // If we have an address property, the contract was deployed
     if (res.address) {
         console.log('Contract address: ' + res.address);
-
         // Let's test the deployed contract
         testContract(res.address);
     }
@@ -59,12 +59,21 @@ router.get('/createContract', (req, res) => {
     res.send(contractInstance.address);
 });
 
-// Get Contract
+// Get ABI
 router.get('/getABI', (req, res) => { 
     res.setHeader('Content-Type', 'application/json');
     res.send(JSON.parse(abi));
 });
 
+// Get Reward based on contract address
+router.get('/getReward/:address', (req, res) => { 
+    const token = contract.at(req.params['address']);
+
+    res.setHeader('Content-Type', 'application/json');
+    res.send(token.getReward.call(function(err, res){ console.log(res.toString()) }));
+});
+
+//Get goalClosed based on contract address
 router.get('/isGoalClosed/:address', (req, res) => { 
     const token = contract.at(req.params['address']);
 

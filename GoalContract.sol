@@ -16,8 +16,9 @@ contract GoalContract {
         goalClosed = false;
     }
     
-    function closeGoal() {
+    function closeGoal() public returns (bool) {
         goalClosed = true;
+        return goalClosed;
     }
     
     function addWinner(address _winner) public {
@@ -41,5 +42,9 @@ contract GoalContract {
     
     function isGoalClosed() public returns (bool) {
         return goalClosed;
+    }
+    
+    function getReward() public returns (uint) {
+        return reward;
     }
 }
