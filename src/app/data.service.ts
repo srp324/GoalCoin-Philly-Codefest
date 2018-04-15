@@ -14,8 +14,8 @@ export class DataService {
     return this._http.get("/api/getABI2").map(result => this.result = result.json().data);
   }
 
-  createContract() {
-    
+  deployContract(owner, addresses, goal, reward) {
+    return this._http.get("/api/deployContract/" + owner + "-" + addresses + "-" + reward).map(result => this.result = result.json().data);
   }
 
 }

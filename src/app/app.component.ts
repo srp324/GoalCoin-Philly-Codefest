@@ -11,7 +11,7 @@ import { DataService } from './data.service';
 export class AppComponent {
   // Define a users property to hold our user data
   //users: Array<any>;
-  users: any;
+  result: any;
   dataService: DataService;
   owner = "";
   addresses = "";
@@ -26,8 +26,14 @@ export class AppComponent {
   }
 
   getABI() {
-    this._dataService.getABI().subscribe(res => this.users = res);
+    this._dataService.getABI().subscribe(res => this.result = res);
     console.log("Got ABI!");
-    console.log(this.users);
+    console.log(this.result);
+  }
+
+  deployContract() {
+    this._dataService.deployContract(this.owner, this.addresses, this.goal, this.reward).subscribe(res => this.result = res);
+    console.log("Created contract with owner: " + this.owner);
+    console.log(this.result);
   }
 }
