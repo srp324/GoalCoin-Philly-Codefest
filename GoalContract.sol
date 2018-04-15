@@ -4,6 +4,7 @@ contract GoalContract {
     address public owner;
     uint public reward;
     address[] public winners;
+    uint winnersCount;
     mapping (address => uint) public balanceOf; // This creates an array with all balances
     bool public goalClosed;
     
@@ -14,6 +15,7 @@ contract GoalContract {
         balanceOf[owner] = _reward;              // Attribute the owner with the reward prize
         reward = _reward;
         goalClosed = false;
+        winnersCount = 0;
     }
     
     function closeGoal() public returns (bool) {
@@ -23,6 +25,7 @@ contract GoalContract {
     
     function addWinner(address _winner) public {
         winners.push(_winner);
+        winnersCount += 1;
     }
     
     function transferToWinners() public {
@@ -53,7 +56,7 @@ contract GoalContract {
     }
     
     function getWinnersSize() public returns (uint) {
-        return winners.length;
+        return winnersCount;
     }
     
     function getOwner() public returns (address) {
