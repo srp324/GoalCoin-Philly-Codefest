@@ -56,5 +56,9 @@ contract GoalContract {
         return winners.length;
     }
     
+    function getOwner() public returns (address) {
+        return owner;
+    }
+    
     function AddEth () payable {}
 }
