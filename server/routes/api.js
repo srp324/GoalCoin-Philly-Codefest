@@ -42,9 +42,11 @@ router.get('/deployContract/:owner-:addresses-:reward', (req, res) => {
 
                 //Send reward budgets to storage account
                 var addresses = req.params['addresses'].split(",");
+                var owner = req.params['owner'];
 
                 for (var i = 0; i < addresses.length; ++i) {
                     console.log(i + ": " + addresses[i] + " - " + web3.eth.getBalance(addresses[i]) + " -- " + req.params['reward'] / addresses.length + " TO 0xc91cbdbbb3e99d1a578fc07ddd985faf2e573155");
+                    res.addUser(addresses[i], {from: owner, gas:3000000});
                     web3.eth.sendTransaction({from: addresses[i], to: '0xc91cbdbbb3e99d1a578fc07ddd985faf2e573155', value: web3.toWei(req.params['reward'] / addresses.length, "ether")});
                     
                 }
@@ -121,6 +123,23 @@ router.get('/getWinner/:caddress-:index', (req, res) => {
 
     res.setHeader('Content-Type', 'application/json');
     res.send(token.getWinner.call(req.params['index'], function(err, res){ console.log(res) }));
+});
+
+// Add user based on contract address and user address
+router.get('/addUser/:caddress-:uaddress', (req, res) => { 
+    const token = contract.at(req.params['caddress']);
+
+    res.setHeader('Content-Type', 'application/json');
+    res.send(token.addUser(req.params['uaddress'], {from: req.params['uaddress'], gas:3000000}, function(err, res){ console.log("Added user " + req.params['uaddress']) }));
+});
+
+// Add list of users
+router.get('/getUsers/:caddress', (req, res) => { 
+    const token = contract.at(req.params['caddress']);
+
+    response.data = token.getUsers.call();
+    res.setHeader('Content-Type', 'application/json');
+    res.json(response);
 });
 
 // Get Owner
