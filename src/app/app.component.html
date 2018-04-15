@@ -1,20 +1,32 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-</div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://github.com/angular/angular-cli/wiki">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div class="container">
 
+        <h1>GoalCoin</h1>
+
+		<h2 id="instructor"></h2>
+		
+		<label for="owner" class="col-lg-2 control-label">Your Address</label>
+        <input id="owner" type="text" placeholder="Ex: 0xdbaa1dcc665a165e3bf046220767dd220ae0a270">
+		
+
+        <label for="addresses" class="col-lg-2 control-label">User Addresses</label>
+        <input id="addresses" type="text" placeholder="Ex: 0x9c569cdfec5ea144558d7d452fb60fcc16cb4902,0x530408d022015e6ac11483ada6ea8ee92c4fa06d,0x65e685befa9ffd287c3e3d8199e1e01d65a3c925">
+		
+        <label for="goal" class="col-lg-2 control-label">Goal</label>
+		<input id="goal" type="text" placeholder="Ex: Do 50 pushups a day for a month">
+		
+		<label for="reward" class="col-lg-2 control-label">Reward</label>
+        <input id="reward" type="text" placeholder="0 ETC">
+
+        <button id="button">Create goal!</button>
+    </div>
+</body>
+</html>

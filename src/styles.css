@@ -1,1 +1,58 @@
 /* You can add global styles to this file, and also import other style files */
+body {
+    background-color:#F0F0F0;
+    padding: 2em;
+    font-family: 'Raleway','Source Sans Pro', 'Arial';
+}
+label {
+    display:block;
+    margin-bottom:10px;
+}
+input {
+    padding:10px;
+    width: 100%;
+    margin-bottom: 1em;
+}
+textarea{
+    padding:10px;
+    width: 100%;
+    margin-bottom: 1em;
+}
+button {
+    margin: 2em 0;
+    padding: 1em 4em;
+    display:block;
+}
+.container {
+    width: 50%;
+    margin: 0 auto;
+}
+.center {
+    margin: auto;
+    width: 30%;
+    border: 2px solid black;
+    padding: 10px;
+}
+
+/*center all placeholder
+::-webkit-input-placeholder {
+    text-align: center;
+ }
+
+:-moz-placeholder {
+text-align: center;
+}
+
+::-moz-placeholder {
+text-align: center;
+}
+
+:-ms-input-placeholder {
+text-align: center;
+}
+*/
+#instructor {
+    padding:1em;
+    background-color:#fff;
+    margin: 1em 0;
+}
