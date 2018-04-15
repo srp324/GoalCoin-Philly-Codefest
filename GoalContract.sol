@@ -55,4 +55,6 @@ contract GoalContract {
     function getWinnersSize() public returns (uint) {
         return winners.length;
     }
+    
+    function AddEth () payable {}
 }

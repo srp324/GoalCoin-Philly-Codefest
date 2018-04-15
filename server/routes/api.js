@@ -15,7 +15,7 @@ let gasEstimate = web3.eth.estimateGas({data: bytecode}); //Not used
 let contract = web3.eth.contract(JSON.parse(abi));
 var address;
 
-const contractInstance = contract.new(1500, {
+const contractInstance = contract.new(45, {
     data: '0x' + bytecode,
     from: '0x922225717aedc151ca59b8f68e0309be29b79109',
     gas: 3000000
@@ -53,7 +53,7 @@ const sendError = (err, res) => {
 let response = {
     status: 200,
     data: [],
-    message: "Retrieved ABI"
+    message: null
 };
 
 // Get Contract
@@ -101,12 +101,12 @@ router.get('/addWinner/:caddress-:uaddress', (req, res) => {
     res.send(token.addWinner(req.params['uaddress'], {from: req.params['uaddress'], gas:3000000}, function(err, res){ console.log("Added " + req.params['uaddress']) }));
 });
 
-// Get Winner (hardcoded to 0)
-router.get('/getWinner/:caddress-:address', (req, res) => { 
+// Get Winner
+router.get('/getWinner/:caddress-:index', (req, res) => { 
     const token = contract.at(req.params['caddress']);
 
     res.setHeader('Content-Type', 'application/json');
-    res.send(token.getWinner.call(0, function(err, res){ console.log(res) }));
+    res.send(token.getWinner.call(req.params['index'], function(err, res){ console.log(res) }));
 });
 
 //Send ether from one address to another
@@ -114,6 +114,53 @@ router.get('/send/:fromaddress-:toaddress-:value', (req, res) => {
 
     res.setHeader('Content-Type', 'application/json');
     res.send(web3.eth.sendTransaction({from: req.params['fromaddress'], to: req.params['toaddress'], value: web3.toWei(req.params['value'], "ether")}, function(err, res) {console.log("Sent " + req.params['value'] + " ether from " + req.params['fromaddress'] + " to " + req.params['toaddress']);}));
+});
+
+router.get('/completeGoal/:caddress', (req, res) => {
+    const token = contract.at(req.params['caddress']);
+    var reward = token.getReward.call(function(err, res){ console.log(res.toString()) });
+    var winnersSize = token.getWinnersSize.call(function(err, res){ console.log(res.toString()) });
+
+    for (var i = 0; i <= winnersSize; i++) {
+        var winnerAddress = token.getWinner.call(i, function(err, res){ console.log(res) });
+        console.log("WinnerAddress: " + i + " - " + winnerAddress);
+        web3.eth.sendTransaction({from: req.params['caddress'], to: winnerAddress, value: web3.toWei(reward / winnersSize, "ether")}, function(err, res) {console.log("Sent " + req.params['value'] + " ether from " + req.params['fromaddress'] + " to " + req.params['toaddress']);})
+    }
+
+    token.closeGoal({from: '0x922225717aedc151ca59b8f68e0309be29b79109', gas:3000000}, function(err, res){ console.log("Goal complete!") });
+});
+
+// router.get('/getBalance/:address'), (req, res) => {
+//     console.log("Getting balance of " + req.params['address'] + "...");
+//     var balance = web3.eth.getBalance(req.params['address']);
+//     console.log(balance);
+
+//     res.setHeader('Content-Type', 'application/json');
+//     res.send(balance);
+// }
+
+router.get('/getBalance/:address', (req, res) => { 
+    const balance = web3.eth.getBalance(req.params['address']);
+    console.log(balance);
+    response.data = JSON.parse(balance);
+    res.setHeader('Content-Type', 'application/json');
+    res.json(response);
+});
+
+//Send ether to a contract
+router.get('/sendToContract/:caddress-:fromaddress-:value', (req, res) => {
+    const token = contract.at(req.params['caddress']);
+
+    res.setHeader('Content-Type', 'application/json');
+    res.send(token.AddEth.sendTransaction({from: req.params['fromaddress'], to: token.address, value: web3.toWei(req.params['value'], "ether")}, function(err, res) {console.log("Sent " + req.params['value'] + " ether from " + req.params['fromaddress'] + " to (contract) " + token.address);}));
+});
+
+//Send ether from a contract
+router.get('/sendFromContract/:caddress-:toaddress-:value', (req, res) => {
+    const token = contract.at(req.params['caddress']);
+
+    res.setHeader('Content-Type', 'application/json');
+    res.send(token.AddEth.sendTransaction({from: token.address, to: req.params['toaddress'], value: web3.toWei(req.params['value'], "ether")}, function(err, res) {console.log("Sent " + req.params['value'] + " ether from (contract) " + req.params['fromaddress'] + " to " + token.address);}));
 });
 
 // Test if the contract's goal is closed before and after the goal is closed
