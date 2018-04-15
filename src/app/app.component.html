@@ -13,24 +13,23 @@
 
 		<h2 id="instructor"></h2>
 		
-		<label for="owner" class="col-lg-2 control-label">Your Address</label>
+		    <label for="owner" class="col-lg-4 control-label">Your Address</label>
         <input id="owner" type="text" placeholder="Ex: 0xdbaa1dcc665a165e3bf046220767dd220ae0a270">
 		
 
-        <label for="addresses" class="col-lg-2 control-label">User Addresses</label>
+        <label for="addresses" class="col-lg-4 control-label">User Addresses</label>
         <input id="addresses" type="text" placeholder="Ex: 0x9c569cdfec5ea144558d7d452fb60fcc16cb4902,0x530408d022015e6ac11483ada6ea8ee92c4fa06d,0x65e685befa9ffd287c3e3d8199e1e01d65a3c925">
 		
-        <label for="goal" class="col-lg-2 control-label">Goal</label>
-		<input id="goal" type="text" placeholder="Ex: Do 50 pushups a day for a month">
+        <label for="goal" class="col-lg-4 control-label">Goal</label>
+		    <input id="goal" type="text" placeholder="Ex: Do 50 pushups a day for a month">
 		
-		<label for="reward" class="col-lg-2 control-label">Reward</label>
+		    <label for="reward" class="col-lg-4 control-label">Reward</label>
         <input id="reward" type="text" placeholder="0 ETC">
 
-        <button id="button">Create goal!</button>
+        <button id="creategoal" type="button" class="btn btn-primary btn-lg" (click)="getABI();">Create goal!</button>
     </div>
 
     <div class="row">
-        <button type="button" class="btn btn-success" (click)="getABI();">GetABI</button>
     </div>
 
 </body>
