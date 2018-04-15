@@ -51,4 +51,8 @@ contract GoalContract {
     function getWinner(uint index) public returns (address) {
         return winners[index];
     }
+    
+    function getWinnersSize() public returns (uint) {
+        return winners.length;
+    }
 }
