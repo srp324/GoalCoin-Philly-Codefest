@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Goals</title>
+        <script>
+            function getGoalInfo(){
+                var owner = [(ngModel)];
+                var addresses = document.getElementById("addresses").value;
+                var goal = document.getElementById("goal").value;
+                var reward = document.getElementById("reward").value;
+            }
+        </script>
+    </head>
+    <body>
+        <div class="container" action="getGoalInfo">
+            <h1>Goal Profile</h1>
+            <h2 id="instructor"></h2>
+
+            <label for="owner" class="col-lg-2 control-label"><Your Address></label>
+            <p id="owner"></p>
+
+            <label for="addresses" class="col-lg-2 control-label">User Addresses</label>
+            <p id="addresses"></p>
+
+            <label for="goal" class="col-lg-2 control-label">Goal</label>
+            <p id="goal"></p>
+
+            <label for="reward" class="col-lg-2 control-label">Reward</label>
+            <p id="reward"></p>
+
+            <button id="button">Choose Winner!</button>
+        </div>
+    </body>
+
+</html>
